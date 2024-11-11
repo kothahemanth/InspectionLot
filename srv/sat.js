@@ -43,9 +43,9 @@ module.exports = cds.service.impl(async function () {
         const structuredData = {
             InspectionLotNode: {
                 ...lotData[0],
-                InspectionCharacteristics: charData.map(item => ({
+                InspectionOperations: opData.map(item => ({
                     ...item,
-                    InspectionOperations: opData.filter(op => op.InspPlanOperationInternalID === item.InspPlanOperationInternalID),
+                    InspectionCharacteristics: charData.filter(char => char.InspPlanOperationInternalID === item.InspPlanOperationInternalID),
                     InspectionResults: resData.filter(res => res.InspPlanOperationInternalID === item.InspPlanOperationInternalID),
                     InspectionResultValues: resValueData.filter(val => val.InspPlanOperationInternalID === item.InspPlanOperationInternalID)
                 }))
@@ -66,5 +66,10 @@ module.exports = cds.service.impl(async function () {
         const updatedJsonData = ensureEmptyTags(structuredData);
         const xml = create(updatedJsonData).end({ prettyPrint: true });
         console.log("Generated XML:", xml);
+
+        // Encode the XML in base64
+        const base64XML = Buffer.from(xml).toString('base64');
+        
+        return { value: base64XML };
     });
 });
