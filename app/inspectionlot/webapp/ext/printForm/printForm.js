@@ -17,24 +17,17 @@ sap.ui.define([
             };
             this.editFlow.invokeAction('InspectionService.printForm', mParameters)
                 .then(function(result) {
-                    let base64PDF = result.getObject().value;  
-                    console.log(base64PDF);
-                    const byteCharacters = atob(base64PDF);
-                    const byteNumbers = new Array(byteCharacters.length);
-                    for (let i = 0; i < byteCharacters.length; i++) {
-                        byteNumbers[i] = byteCharacters.charCodeAt(i);
-                    }   
-                    const byteArray = new Uint8Array(byteNumbers);
-                    const blob = new Blob([byteArray], { type: 'application/pdf' });
-                    const pdfUrl = URL.createObjectURL(blob);
+                    let base64XML = result.getObject().value;  
+                    console.log(base64XML);
+                    const xmlData = atob(base64XML);  // Decode the base64 XML data
 
-                    // Directly display PDF in the dialog without any input box
+                    // Display the XML in the dialog
                     const oHtml = new HTML({
-                        content: `<iframe src="${pdfUrl}" width="100%" height="500px"></iframe>`
+                        content: `<pre style="white-space: pre-wrap; word-wrap: break-word;">${xmlData}</pre>`
                     });
 
                     let oDialog = new Dialog({
-                        title: 'Generated PDF',
+                        title: 'Generated XML',
                         contentWidth: "600px",
                         contentHeight: "500px",
                         verticalScrolling: true,
@@ -44,8 +37,10 @@ sap.ui.define([
                                 text: 'Download',
                                 press: function () {
                                     const link = document.createElement('a');
-                                    link.href = pdfUrl;
-                                    link.download = 'generated_pdf.pdf'; 
+                                    const blob = new Blob([xmlData], { type: 'application/xml' });
+                                    const url = URL.createObjectURL(blob);
+                                    link.href = url;
+                                    link.download = 'generated_xml.xml'; 
                                     link.click();  
                                 }
                             }),

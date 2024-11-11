@@ -26,7 +26,7 @@
   "cds": {
     "requires": {
       "API_INSPECTIONLOT_SRV": {
-        "kind": "odata",
+        "kind": "odata-v2",
         "model": "srv/external/API_INSPECTIONLOT_SRV",
         "csrf": true,
         "csrfInBatch": true,
