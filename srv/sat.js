@@ -67,9 +67,6 @@ module.exports = cds.service.impl(async function () {
         const xml = create(updatedJsonData).end({ prettyPrint: true });
         console.log("Generated XML:", xml);
 
-        // Encode the XML in base64
-        const base64XML = Buffer.from(xml).toString('base64');
-        
-        return { value: base64XML };
+        return xml;
     });
 });
